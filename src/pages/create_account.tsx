@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import { FormEvent, useState, useEffect } from 'react';
 import styles from 'src/styles/create_account.module.scss';
+import Image from 'next/image'
 import { validateCredentials, validations } from './api/validity_checks';
 import Message from './messages';
 
@@ -37,15 +38,16 @@ export default function CreateAccount() {
       </Head>
       <article className={styles.article}>
         <form className={styles.form} onSubmit={handleSubmit}>
+          <Image src="/Wealthfront_Logo.svg" alt="wealthfront logo" width="64" height="64" />
           <h1>Create New Account</h1>
           <ul>
-            {messages.map((item) => <Message key={item[0]} message={item[1]}/>)}
+            {messages.map((item) => <Message key={item[0]} errorCode={item[0]} message={item[1]}/>)}
           </ul>
           <label htmlFor="username">Username</label>
           <input type="text" name="username" placeholder="E.g. new_user1234"/>
           <label htmlFor="password">Password</label>
           <input type="password" name="password" placeholder="E.g. Donotusethispassword1000!"/>
-          <button>Create Account</button>
+          <button className={styles.createAccountButton}>Create Account</button>
         </form>
       </article>
     </>
