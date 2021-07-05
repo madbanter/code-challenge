@@ -25,7 +25,8 @@ interface BooleanResult {
 
 export default function createNewAccount(req: NextApiRequest, res: NextApiResponse<BooleanResult>) {
   if (req.method !== 'POST') {
-    res.status(404).json({ result: false, errors: {"BadRequestMethod": "The /create_new_account endpoint only supports POST requests."} });
+    res.status(404).json({ result: false, errors: { "BadRequestMethod": "The /create_new_account endpoint only supports POST requests." } });
+    return
   }
 
   let body: NextApiRequest["body"] & CreateNewAccountParameters;
