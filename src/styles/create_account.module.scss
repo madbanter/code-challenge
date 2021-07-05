@@ -14,7 +14,7 @@ $button-color: #4840bb;
 .form {
   width: 350px;
   box-shadow: 0 2px 14px rgba(0, 0, 0, 0.15);
-  padding: 16px;
+  padding: 20px;
   border-radius: 16px;
   background: #fff;
   font-family: "Calibre", "Calibri", "Roboto";
@@ -28,9 +28,10 @@ $button-color: #4840bb;
   }
   label {
     color: grey;
-    font-size: 16px;
+    font-size: 17px;
     text-align: left;
     display: block;
+    font-weight: 500;
   }
   input {
     display: block;
@@ -38,7 +39,9 @@ $button-color: #4840bb;
     outline: 0;
     border-width: 0 0 2px;
     border-color: lightgrey;
-    margin: 40px 10px;
+    margin: 10px 0px 20px;
+    padding: 0px;
+    font-size: 20px;
   }
 }
 
@@ -54,8 +57,26 @@ $button-color: #4840bb;
   border: 0;
 }
 
-.redMessage,
-.yellowMessage,
-.greenMessage {
+.ErrorMessage,
+.WarningMessage,
+.SuccessMessage {
   list-style-type: none;
+  border-radius: 16px;
+  margin: 4px 0px;
+  text-align: start;
+  align-self: center;
+  padding: 0px 5px;
+  width: 100%;
+}
+
+.ErrorMessage {
+  background-color: tomato;
+}
+
+.WarningMessage {
+  background-color: gold;
+}
+
+.SuccessMessage {
+  background-color: forestgreen;
 }
