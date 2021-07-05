@@ -12,36 +12,44 @@ $button-color: #4840bb;
 }
 
 .form {
-  width: 350px;
   box-shadow: 0 2px 14px rgba(0, 0, 0, 0.15);
-  padding: 20px;
+  padding: 24px;
   border-radius: 16px;
   background: #fff;
   font-family: "Calibre", "Calibri", "Roboto";
   font-size: 24px;
   text-align: center;
+  align-items: center;
   height: auto;
   min-height: 400px;
-  width: 650px;
+  width: 680px;
   h1 {
     font-weight: 900;
   }
   label {
     color: grey;
-    font-size: 17px;
+    font-size: 20px;
     text-align: left;
-    display: block;
     font-weight: 500;
+    margin-left: 16px;
+    display: block;
   }
   input {
-    display: block;
-    width: 100%;
+    width: 95%;
     outline: 0;
     border-width: 0 0 2px;
     border-color: lightgrey;
-    margin: 10px 0px 20px;
+    margin: 10px 0px 30px;
     padding: 0px;
     font-size: 20px;
+  }
+  ul {
+    margin: 30px auto;
+    padding: 0;
+    width: 95%;
+    div {
+      padding: 0;
+    }
   }
 }
 
@@ -50,8 +58,8 @@ $button-color: #4840bb;
   color: rgba(255, 255, 255, 0.865);
   font-size: 18px;
   display: block;
-  margin: 6px auto;
-  width: 100%;
+  margin: 12px auto 4px;
+  width: 95%;
   padding: 16px;
   border-radius: 10px;
   border: 0;
@@ -61,12 +69,16 @@ $button-color: #4840bb;
 .WarningMessage,
 .SuccessMessage {
   list-style-type: none;
-  border-radius: 16px;
-  margin: 4px 0px;
-  text-align: start;
+  border-radius: 10px;
+  margin: 4px auto;
+  text-align: left;
   align-self: center;
-  padding: 0px 5px;
+  padding: 0px 8px;
   width: 100%;
+  li {
+    padding-left: 10px;
+    font-size: 22px;
+  }
 }
 
 .ErrorMessage {
@@ -78,5 +90,5 @@ $button-color: #4840bb;
 }
 
 .SuccessMessage {
-  background-color: forestgreen;
+  background-color: lightgreen;
 }
