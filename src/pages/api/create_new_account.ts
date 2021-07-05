@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { Validation, validateCredentials, validations } from './validity_checks';
+import { validateCredentials, validations } from './validity_checks';
 
 interface CreateNewAccountParameters {
   username: string;
@@ -11,28 +11,38 @@ interface BooleanResult {
   errors?: Record<string, string>;
 }
 
-const exposedPasswordCheck = async function(password: string) {
-  const response = await fetch('http://localhost:3000/api/password_exposed', {
-    method: 'POST',
-    body: JSON.stringify({password}),
-  })
-  const resolved = await response.json()
-  // return resolved.result === false;
-  const test = resolved.result === false;
-  console.log(test)
-  return test
-};
+// const exposedPasswordCheck = async function(password: string) {
+//   const response = await fetch('http://localhost:3000/api/password_exposed', {
+//     method: 'POST',
+//     body: JSON.stringify({password}),
+//   })
+//   const resolved = await response.json()
+//   // return resolved.result === false;
+//   const test = resolved.result === false;
+//   console.log(test)
+//   return test
+// };
 
 export default function createNewAccount(req: NextApiRequest, res: NextApiResponse<BooleanResult>) {
-  const body = JSON.parse(req.body);
-  const credentials = {
-    username: body.username || '',
-    password: body.password || ''
-  } as const;
-  const credentialCheck = validateCredentials(credentials, validations);
-  res.status(200).json({ result: credentialCheck.result, errors: credentialCheck.errors });
-}
+  if (req.method !== 'POST') {
+    res.status(404).json({ result: false, errors: {"BadRequestMethod": "The /create_new_account endpoint only supports POST requests."} });
+  }
 
+  let body: NextApiRequest["body"] & CreateNewAccountParameters;
+  try {
+    body = JSON.parse(req.body);
+  } catch {
+    body = req.body;
+  } finally {
+
+    const credentials = {
+      username: body.username || '',
+      password: body.password || ''
+    } as const;
+    const credentialCheck = validateCredentials(credentials, validations);
+    res.status(200).json({ result: credentialCheck.result, errors: credentialCheck.errors });
+  }
+}
 // const validateCredential = async (credential: string, criteria: Validation<string>[]): Promise<BooleanResult> => {
 //   const results = criteria.map(async criterion => {
 //     const checkResult = await criterion.check(credential);
