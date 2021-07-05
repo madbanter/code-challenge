@@ -36,23 +36,24 @@ export default function createNewAccount(req: NextApiRequest, res: NextApiRespon
     password: body.password || ''
   } as const;
   const credentialCheck = validateCredentials(credentials, validations);
-  res.status(200).json({ result: credentialCheck.result, errors: { ...credentialCheck.errors } });
+  res.status(200).json({ result: credentialCheck.result, errors: credentialCheck.errors });
 }
 
-
-// Refactor to general case iterating over credentials (not having to have separate validateUsername and validatePassword functions)
 const validateCredentials = (credentials: CreateNewAccountParameters, criteria: Validation<string>[]): BooleanResult => {
-  const usernameValidity = validateUsername(credentials.username, criteria.filter(criterion => criterion.field === 'username'));
-  const passwordValidity = validatePassword(credentials.password, criteria.filter(criterion => criterion.field === 'password'));
-  return {
-    result: usernameValidity.result && passwordValidity.result,
-    errors: { ...usernameValidity?.errors, ...passwordValidity?.errors }
+  const validityChecks = { result: true, errors: {} };
+  for (const [key, value] of Object.entries(credentials)) {
+    const checks = criteria.filter(criterion => criterion.field === key);
+    const credentialResult = validateCredential(value, checks);
+    validityChecks.result = validityChecks.result && credentialResult.result;
+    validityChecks.errors = { ...validityChecks.errors, ...credentialResult.errors };
   }
+  console.log(validityChecks);
+  return validityChecks;
 }
 
-const validateUsername = (username: string, criteria: Validation<string>[]): BooleanResult => {
-  const results = criteria.map(criterion => {
-    const checkResult = criterion.check(username);
+const validateCredential = (credential: string, criteria: Validation<string>[]): BooleanResult => {
+  const checkedResults = criteria.map(criterion => {
+    const checkResult = criterion.check(credential);
     return (
       {
         result: checkResult,
@@ -60,11 +61,11 @@ const validateUsername = (username: string, criteria: Validation<string>[]): Boo
       }
     )
   });
-  let result = { result: results.every(item => item.result === true) } as BooleanResult;
+  let result = { result: checkedResults.every(checkedResult => checkedResult.result === true) } as BooleanResult;
   if (!result.result) {
     result.errors = {};
-    results.filter(item => item.result === false).forEach(item => {
-      for (const [errorName, error] of Object.entries(item.errors)) {
+    checkedResults.filter(checkedResult => checkedResult.result === false).forEach(checkedResult => {
+      for (const [errorName, error] of Object.entries(checkedResult.errors)) {
         result.errors[errorName] = error;
       }
     });
@@ -72,27 +73,29 @@ const validateUsername = (username: string, criteria: Validation<string>[]): Boo
   return result;
 }
 
-const validatePassword = (password: string, criteria: Validation<string>[]): BooleanResult => {
-  const results = criteria.map(criterion => {
-    const checkResult = criterion.check(password);
-    return (
-      {
-        result: checkResult,
-        errors: checkResult ? null : { [criterion.errorName]: criterion.error }
-      }
-    )
-  });
-  let result = { result: results.every(item => item.result === true) } as BooleanResult;
-  if (!result.result) {
-    result.errors = {};
-    results.filter(item => item.result === false).forEach(item => {
-      for (const [errorName, error] of Object.entries(item.errors)) {
-        result.errors[errorName] = error;
-      }
-    });
-  }
-  return result;
-}
+// const validateCredential = async (credential: string, criteria: Validation<string>[]): Promise<BooleanResult> => {
+//   const results = criteria.map(async criterion => {
+//     const checkResult = await criterion.check(credential);
+//     return (
+//       {
+//         result: checkResult,
+//         errors: checkResult ? null : { [criterion.errorName]: criterion.error }
+//       }
+//     )
+//   });
+//   await Promise.all(results).then(values => {
+//     let result = { result: values.every(item => item.result === true) } as BooleanResult;
+//     if (!result.result) {
+//       result.errors = {};
+//       values.filter(item => item.result === false).forEach(item => {
+//         for (const [errorName, error] of Object.entries(item.errors)) {
+//           result.errors[errorName] = error;
+//         }
+//       });
+//     }
+//     return result;
+//   });
+// }
 
 const usernameChecks = [
   {
