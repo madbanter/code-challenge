@@ -2,6 +2,7 @@ import Head from 'next/head';
 import { FormEvent, useState, useEffect } from 'react';
 import styles from 'src/styles/create_account.module.scss';
 import { validateCredentials, validations } from './api/validity_checks';
+import Message from './messages';
 
 export default function CreateAccount() {
   const [messages, setMessages] = useState([]);
@@ -10,7 +11,7 @@ export default function CreateAccount() {
 
     const credentials = { username: evt.currentTarget.username.value, password: evt.currentTarget.password.value }
     let credentialsValid = validateCredentials(credentials, validations);
-    let messageList: string[];
+    let messageList: [string, string][];
 
     if (credentialsValid.result) {
       const response = await fetch('/api/create_new_account', {
@@ -19,12 +20,12 @@ export default function CreateAccount() {
       });
       credentialsValid = await response.json()
       if (credentialsValid.result) {
-        messageList = ['Account created successfully!'];
+        messageList = [['Success', 'Account created successfully!']];
       } else {
-        messageList = Object.values(credentialsValid.errors);
+        messageList = Object.entries(credentialsValid.errors);
       }
     } else {
-      messageList = Object.values(credentialsValid.errors);
+      messageList = Object.entries(credentialsValid.errors);
     }
     setMessages(messageList);
   }
@@ -38,9 +39,7 @@ export default function CreateAccount() {
         <form className={styles.form} onSubmit={handleSubmit}>
           <h1>Create New Account</h1>
           <ul>
-            {messages.map((message) =>
-              <li>{message}</li>
-            )}
+            {messages.map((item) => <Message key={item[0]} message={item[1]}/>)}
           </ul>
           <label htmlFor="username">Username</label>
           <input type="text" name="username" placeholder="E.g. new_user1234"/>
