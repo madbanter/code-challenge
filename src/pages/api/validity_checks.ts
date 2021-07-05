@@ -17,16 +17,13 @@ export interface Validation<T> {
   error: string;
 }
 
-const exposedPasswordCheck = async function(password: string) {
+export const exposedPasswordCheck = async function(password: string): Promise<boolean> {
   const response = await fetch('http://localhost:3000/api/password_exposed', {
     method: 'POST',
     body: JSON.stringify({password}),
   })
   const resolved = await response.json()
-  // return resolved.result === false;
-  const test = resolved.result === false;
-  console.log(test)
-  return test
+  return resolved.result;
 };
 
 export const validateCredentials = (credentials: CreateNewAccountParameters, criteria: Validation<string>[]): BooleanResult => {

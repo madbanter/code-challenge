@@ -2,17 +2,24 @@ import Head from 'next/head';
 import { FormEvent, useState, useEffect } from 'react';
 import styles from 'src/styles/create_account.module.scss';
 import Image from 'next/image'
-import { validateCredentials, validations } from './api/validity_checks';
+import { validateCredentials, validations, exposedPasswordCheck } from './api/validity_checks';
 import Message from './messages';
 
 export default function CreateAccount() {
   const [messages, setMessages] = useState([]);
+
   async function handleSubmit(evt: FormEvent<HTMLFormElement>) {
     evt.preventDefault();
 
     const credentials = { username: evt.currentTarget.username.value, password: evt.currentTarget.password.value }
     let credentialsValid = validateCredentials(credentials, validations);
     let messageList: [string, string][];
+    let additionalMessageList = [];
+
+    const pwExposed = await exposedPasswordCheck(credentials.password);
+    if (pwExposed) {
+      additionalMessageList.push(['ExposedPassword', 'This password has been flagged as exposed!']);
+    }
 
     if (credentialsValid.result) {
       const response = await fetch('/api/create_new_account', {
@@ -28,7 +35,7 @@ export default function CreateAccount() {
     } else {
       messageList = Object.entries(credentialsValid.errors);
     }
-    setMessages(messageList);
+    setMessages([...messageList, ...additionalMessageList]);
   }
 
   return (
