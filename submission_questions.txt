@@ -1,0 +1,49 @@
+Submission Questions
+
+1. How long did you spend working on the coding challenge? How much time did you set aside to think about the design and interface before writing code?
+
+I spent several days working on the challenge. This includes a couple days doing research on forms and semantic HTML/accessibility, and studying TypeScript (which I am new to) and related material. 
+
+2. What are the UI/UX features you implemented? What features did you think about implementing? In what ways do they aid the user?
+
+I implemented: 
+
+- Individual badges for error messages and other messages to give the user specific info about what happened and what might be going wrong.
+- Badges are color-coded, but also specifically mention if they are related to success, warning, or error statuses. This helps with accessibility and usability. 
+- Used password input field for the password, which has password-specific features including obscuring the text input and preventing copying. Adds security for this info. 
+- Handling for request methods other than POST (they are rejected with an error message). 
+- Separate client-side and server-side validation, along with handling to only check the bulk of the validation on the server once the client validation is successful. This helps keep things streamlined and responsive for the user and cuts down on unnecessary traffic.
+- Built the validation checking in such a way that it could be reused for both client and server and was easily extensible in case additional fields or checks are needed (such as a second password confirmation field or other account info).
+
+With more time I might have added: 
+
+- A specific check for account/password being compromised, perhaps with a call to haveibeenpwned.com or something similar. 
+- Animations/transitions for the user interface. 
+- Storing created accounts (usernames) locally to simulate existing accounts and including a check the stored usernames as part of the validation before creating a new account.
+- More test coverage. I ran into some bugs and tricky issues and sunk some time into them. One is mentioned here: https://github.com/testing-library/user-event/issues/20
+
+3. What are some styling and layout considerations you took into account when designing / building the form?
+
+In addition to the features I already mentioned, I took into account:
+
+- Matching the mockup.
+- Being large enough to be readable and accommodate clear messages.
+- Keeping the messages clear without being too verbose.
+- Being large enough that the messages can fit on a single line. 
+- Adding placeholder text to the input fields to provide helpful examples. 
+- Using colors for the messages that are vibrant and meaningful (common stoplight colors) without being too visually jarring.
+
+4. What additional features or functionality would you add if you had 6 more engineering hours? How do you prioritize them? How much time would each one take?
+
+With more time, I would add: 
+
+- More test coverage. Depending on the approach (I tried to avoid refactoring code for the sake of the tests except where it would also help accessibility) this could take the full time.
+- Do a refactor pass on the CSS to be more programmatic, so it can be more easily updated, etc.
+- Add animations/transitions. 
+- Code to integrate with other components (e.g. account creation beyond just the validation of credentials, other checks).
+
+I would prioritize test coverage (2-3 hours) and styling (2-3 hours). The estimates are a bit conservative and also include time for testing.
+
+5. If you added any additional packages, what were they and why did you decide to add them? 
+
+The only things I installed were @types/testing-library__jest-dom and @testing-library/jest-dom when trying to troubleshoot my client tests and get them working. They are in create_account.test.tsx.
