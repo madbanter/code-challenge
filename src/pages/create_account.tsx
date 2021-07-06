@@ -44,17 +44,17 @@ export default function CreateAccount() {
         <title>Create Account</title>
       </Head>
       <article className={styles.article}>
-        <form className={styles.form} onSubmit={handleSubmit}>
+        <form className={styles.form} onSubmit={handleSubmit} aria-label="form">
           <Image src="/Wealthfront_Logo.svg" alt="wealthfront logo" width="64" height="64" />
           <h1>Create New Account</h1>
-          <ul>
+          <ul aria-label="messages">
             {messages.map((item) => <Message key={item[0]} errorCode={item[0]} message={item[1]}/>)}
           </ul>
           <label htmlFor="username">Username</label>
-          <input type="text" name="username" placeholder="E.g. new_user1234"/>
+          <input type="text" name="username" id="username" placeholder="E.g. new_user1234"/>
           <label htmlFor="password">Password</label>
-          <input type="password" name="password" placeholder="E.g. Donotusethispassword1000!"/>
-          <button className={styles.createAccountButton}>Create Account</button>
+          <input type="password" name="password" id="password" placeholder="E.g. Donotusethispassword1000!"/>
+          <button type="submit" className={styles.createAccountButton}>Create Account</button>
         </form>
       </article>
     </>
